@@ -16,7 +16,7 @@ public class CameraDetection : MonoBehaviour
         VisionColor = transform.GetComponent<Transform>();
         VisionColor.GetComponentInParent<MeshRenderer>().material = searchingMaterial;
         CheckPoint = GameObject.FindGameObjectWithTag("CheckPoint").tag;
-        Debug.Log("The CameraDetection script is wroking, or at least starting");
+        //Debug.Log("The CameraDetection script is wroking, or at least starting");
          
 
         if(CheckPoint != null){
