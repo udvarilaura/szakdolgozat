@@ -4,10 +4,11 @@ using UnityEngine;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using System.Linq;
 public class CamPlacerAgent : Agent
 {
     /// <summary><c>CameraPlaceholders</c> is the list of the CameraPlaceholder objects the agent can place the cameras on</summary>
-    [SerializeField] public List<Transform> CameraPlaceholders; //List of the camera placeholders the agent can place objects to
+    [SerializeField] public List<GameObject> CameraPlaceholders; //List of the camera placeholders the agent can place objects to
     [SerializeField] public GameObject CameraToPlace; //The camera prefab //Note: it does not have a tag set. The copies will get tags only. 
     //[SerializeField] public Transform CheckpointTransform; //Checkpoint
     [SerializeField] public Transform CheckpointParent;
@@ -19,11 +20,11 @@ public class CamPlacerAgent : Agent
     private CamInstantiate CamInstantiate; //script we import the CameraInstantiate function from
 
 
-    private List<GameObject> CamPlaceholders;
+    private List<int> UsedCamPlaceholders;
        
     //private CameraDetection CameraDetection;
 
-    public override void OnEpisodeBegin()
+public override void OnEpisodeBegin()
     {
 
         moveCheckpointParentUp();
@@ -52,23 +53,18 @@ public class CamPlacerAgent : Agent
 
         CamInstantiate = new CamInstantiate();
 
-        CamPlaceholders = new List<GameObject>();
-
-        foreach (Transform CamPlaceholder in CameraPlaceholders)
-        {
-            CamPlaceholders.Add(CamPlaceholder.transform.gameObject);
-        }
+        UsedCamPlaceholders = new List<int>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
 
         //We check the CamPlaceholder positions to see where we can put the cameras
-        foreach (Transform CameraPlaceholder in CameraPlaceholders)
+        foreach (GameObject CameraPlaceholder in CameraPlaceholders)
         {
-            sensor.AddObservation(CameraPlaceholder.localPosition.x);
-            sensor.AddObservation(CameraPlaceholder.localPosition.y);
-            sensor.AddObservation(CameraPlaceholder.localPosition.z);
+            sensor.AddObservation(CameraPlaceholder.transform.localPosition.x);
+            sensor.AddObservation(CameraPlaceholder.transform.localPosition.y);
+            sensor.AddObservation(CameraPlaceholder.transform.localPosition.z);
         }
 
         //We also check the transform positions of the checkpoint in the scene
@@ -101,10 +97,16 @@ public class CamPlacerAgent : Agent
         //Az action olyan -e, amit az ágens már használt? 
         //Array az OnEpisodeBeginhez -> amit haszálunk (int array), beletesszünk
 
-        GameObject SelectedPlaceholder = CamPlaceholders[action];
-        CamPlaceholders.Remove(SelectedPlaceholder);
-        //Debug.Log("The current Placeholder is " + SelectedPlaceholder);
+        GameObject SelectedPlaceholder = CameraPlaceholders[action];
+        UsedCamPlaceholders.Add(CameraPlaceholders.IndexOf(SelectedPlaceholder));
 
+        //Debug: 
+        //for (int i = 0; i < UsedCamPlaceholders.Count; i++)
+        //    Debug.Log(UsedCamPlaceholders[i]);
+
+        //Debug.Log("The current Placeholder is " + SelectedPlaceholder);
+        //Debug.Log("The number of selected Placeholders is " + UsedCamPlaceholders.Count);
+        
         GameObject Camera = CamInstantiate.CameraInstantiate(CameraToPlace, SelectedPlaceholder.transform);
 
         Camera.tag = "Camera";
@@ -113,7 +115,11 @@ public class CamPlacerAgent : Agent
         // CameraList: beledobáljuk a lehelyezett kamerákat /OnEpisodeBegin-nél kitakarítjuk
         CameraList.Add(Camera);
 
-
+        if (UsedCamPlaceholders.Count == MAXSTEP)
+        {
+            bool isUnique = isUniqueList(UsedCamPlaceholders);
+            //Debug.Log("Egyedi kiválasztás: "+ isUnique);
+        }
 
     }
 
@@ -147,6 +153,11 @@ public class CamPlacerAgent : Agent
     {
         CheckpointParent.transform.position = transform.position + new Vector3(0, -10, 0);
 
+    }
+
+    public bool isUniqueList<T>(List<T> list)
+    {
+        return list.Distinct().Count() == list.Count();
     }
 }
 
