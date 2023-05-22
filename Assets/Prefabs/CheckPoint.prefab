@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8715664297101521227}
   - component: {fileID: 8715664297101521269}
   - component: {fileID: 2740587025848100717}
+  - component: {fileID: 3614095456506178741}
   m_Layer: 0
   m_Name: CheckPoint
   m_TagString: CheckPoint
@@ -69,5 +70,18 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 14
   m_CollisionDetection: 0
+--- !u!114 &3614095456506178741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8715664297101521268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 921c8184861eff149b022b3fdc9434f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amIDetected: 0

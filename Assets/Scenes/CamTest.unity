@@ -269,6 +269,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &435072786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435072781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 921c8184861eff149b022b3fdc9434f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amIDetected: 0
 --- !u!1001 &604595554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -713,7 +726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715664297101521224, guid: b99802197012810469b28717d2d00897, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.04
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 8715664297101521224, guid: b99802197012810469b28717d2d00897, type: 3}
       propertyPath: m_LocalPosition.y
@@ -721,7 +734,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715664297101521224, guid: b99802197012810469b28717d2d00897, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.37
+      value: -1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8715664297101521224, guid: b99802197012810469b28717d2d00897, type: 3}
       propertyPath: m_LocalRotation.w

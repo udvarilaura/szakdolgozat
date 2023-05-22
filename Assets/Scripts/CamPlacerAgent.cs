@@ -9,18 +9,25 @@ public class CamPlacerAgent : Agent
     /// <summary><c>CameraPlaceholders</c> is the list of the CameraPlaceholder objects the agent can place the cameras on</summary>
     [SerializeField] public List<Transform> CameraPlaceholders; //List of the camera placeholders the agent can place objects to
     [SerializeField] public GameObject CameraToPlace; //The camera prefab //Note: it does not have a tag set. The copies will get tags only. 
-    [SerializeField] public Transform CheckpointTransform; //Checkpoint
+    //[SerializeField] public Transform CheckpointTransform; //Checkpoint
+    [SerializeField] public Transform CheckpointParent;
     [SerializeField] public GameObject CameraParent;
+    [SerializeField] public int MAXSTEP;
+
     private List<GameObject> CameraList;
     //private List<int> ActionList; //For storing the actions the agent used in the current episode
-    private List<GameObject> CamPlaceholders;
-    private List<int> numberOfCamPlaceholders;
-
     private CamInstantiate CamInstantiate; //script we import the CameraInstantiate function from
+
+
+    private List<GameObject> CamPlaceholders;
+       
     //private CameraDetection CameraDetection;
 
     public override void OnEpisodeBegin()
     {
+
+        moveCheckpointParentUp();
+
         //GameObject ThisParent = transform.parent.gameObject;
         //Debug.Log("The parent of the current agent is: "+ThisParent.name);
 
@@ -65,9 +72,9 @@ public class CamPlacerAgent : Agent
         }
 
         //We also check the transform positions of the checkpoint in the scene
-        sensor.AddObservation(CheckpointTransform.localPosition.y);
-        sensor.AddObservation(CheckpointTransform.localPosition.x);
-        sensor.AddObservation(CheckpointTransform.localPosition.z);
+        //sensor.AddObservation(CheckpointTransform.localPosition.y);
+        //sensor.AddObservation(CheckpointTransform.localPosition.x);
+        //sensor.AddObservation(CheckpointTransform.localPosition.z);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -129,13 +136,25 @@ public class CamPlacerAgent : Agent
         actions[0] = 0;
 
     }
+
+    public void moveCheckpointParentUp()
+    {
+        CheckpointParent.transform.position = transform.position + new Vector3(0, 10, 0);
+
+    }
+
+    public void moveCheckpointParentDown()
+    {
+        CheckpointParent.transform.position = transform.position + new Vector3(0, -10, 0);
+
+    }
 }
 
 
-    //IMPORTANT 
-    // What we know rn:
-    // The cameras we place are not placed yet > we can't really refer to them
-    // We can not get their components this way either > question: how can we get a component of an object yet to be created? 
-    // Once created, we need a function to check all cameras
+//IMPORTANT 
+// What we know rn:
+// The cameras we place are not placed yet > we can't really refer to them
+// We can not get their components this way either > question: how can we get a component of an object yet to be created? 
+// Once created, we need a function to check all cameras
 
 

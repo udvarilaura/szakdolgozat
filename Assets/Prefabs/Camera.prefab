@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7325394761539789888}
   - component: {fileID: 2041351269163684574}
   - component: {fileID: 7589229211241876993}
-  - component: {fileID: 431825201013684758}
+  - component: {fileID: 8394112526087815570}
   m_Layer: 0
   m_Name: Vision
   m_TagString: Untagged
@@ -117,22 +117,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &431825201013684758
-MonoBehaviour:
+--- !u!65 &8394112526087815570
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6763979867359046314}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d80fb6fbf788a7a42ac50159df8311c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectedObjectList: []
-  searchingMaterial: {fileID: 2100000, guid: 710d57ea70d7bda4db3b4885bab939ed, type: 2}
-  spottedMaterial: {fileID: 2100000, guid: 260470ddce574874eb8a6b6d5b87cbba, type: 2}
-  isCheckpointChecked: 0
+  serializedVersion: 2
+  m_Size: {x: 0.030423215, y: 0.07265324, z: 0.044708893}
+  m_Center: {x: -0.00013818353, y: -0.0065488135, z: -0.028173396}
 --- !u!1001 &1734764467735174812
 PrefabInstance:
   m_ObjectHideFlags: 0
