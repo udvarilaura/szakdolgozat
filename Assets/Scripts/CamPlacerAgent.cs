@@ -7,32 +7,22 @@ using Unity.MLAgents.Actuators;
 using System.Linq;
 public class CamPlacerAgent : Agent
 {
-    /// <summary><c>CameraPlaceholders</c> is the list of the CameraPlaceholder objects the agent can place the cameras on</summary>
     [SerializeField] public List<GameObject> CameraPlaceholders; //List of the camera placeholders the agent can place objects to
     [SerializeField] public GameObject CameraToPlace; //The camera prefab //Note: it does not have a tag set. The copies will get tags only. 
-    //[SerializeField] public Transform CheckpointTransform; //Checkpoint
-    [SerializeField] public Transform CheckpointParent;
-    [SerializeField] public GameObject CameraParent;
-    [SerializeField] public int MAXSTEP;
+    [SerializeField] public Transform CheckpointParent; // The container parent of the CheckPoint objects. Stores the *important* value of the currently detected checkpoints
+    [SerializeField] public GameObject CameraParent; //The parent of the camera objects we add after we place the cameras
+    [SerializeField] public int MAXSTEP; // Should be the same as the Max Step of the agent. 
 
-    private List<GameObject> CameraList;
-    //private List<int> ActionList; //For storing the actions the agent used in the current episode
+    private List<GameObject> CameraList; // Storing the currently added cameras
     private CamInstantiate CamInstantiate; //script we import the CameraInstantiate function from
-
-
     private List<int> UsedCamPlaceholders;
-       
-    //private CameraDetection CameraDetection;
 
 public override void OnEpisodeBegin()
     {
 
         moveCheckpointParentUp();
 
-        //GameObject ThisParent = transform.parent.gameObject;
-        //Debug.Log("The parent of the current agent is: "+ThisParent.name);
-
-        //Looking for the objects with Camera tag
+        //Looking for the objects with Camera tag --- This is surely looking for cameras all over the world, check later
         GameObject[] CamGameObjects = GameObject.FindGameObjectsWithTag("Camera");
 
         foreach (GameObject CamGameObject in CamGameObjects)
@@ -40,18 +30,19 @@ public override void OnEpisodeBegin()
             //Debug.Log("There was an object to delete in the 29th line, and it's name iiiiis: " + CamGameObject.name +", no, not John Cena");
             Destroy(CamGameObject);
         }
-        //Debug.Log("32th row: The length of the array CamGameObjects after being deleted: " + CamGameObjects.Length);
+        //Test
+        //Debug.Log("43th row: The length of the array CamGameObjects after being deleted: " + CamGameObjects.Length);
 
-
+        //Test
         //Checking if the camera list contains anything, should only be 0 for the first time
-        if (CameraList == null)
-        {
-            Debug.Log("The camera list is empty");
-        }
+        //if (CameraList == null)
+        //{
+        //    Debug.Log("The camera list is empty");
+        //}
         CameraList = new List<GameObject>();
 
 
-        CamInstantiate = new CamInstantiate();
+        CamInstantiate = gameObject.AddComponent<CamInstantiate>();
 
         UsedCamPlaceholders = new List<int>();
     }
@@ -76,31 +67,18 @@ public override void OnEpisodeBegin()
     public override void OnActionReceived(ActionBuffers actions)
     {
 
-
-        GameObject ThisParent = CameraParent;
-        //TEST
-        //Debug.Log("The parent of the current agent is: "+ThisParent.name);
-
-        //////////////////////USE THIS LATER
-        //ParentOfAgent = this.transform.parent.gameObject;
-        //Debug.Log("ParentOfAgent" + ParentOfAgent);
-
-        Transform[] AllChildren = ThisParent.GetComponentsInChildren<Transform>();
-
-        //foreach (Transform child in AllChildren) { Debug.Log("CamChild (letevos 74.sor)" + child); }
+        int CurrentCheckedCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().CurrentCheckedCheckPoints;
 
 
         int action = actions.DiscreteActions[0];
 
+        //Test:
         //Debug.Log("action we took: " + action);
-
-        //Az action olyan -e, amit az ágens már használt? 
-        //Array az OnEpisodeBeginhez -> amit haszálunk (int array), beletesszünk
 
         GameObject SelectedPlaceholder = CameraPlaceholders[action];
         UsedCamPlaceholders.Add(CameraPlaceholders.IndexOf(SelectedPlaceholder));
 
-        //Debug: 
+        //Tests: 
         //for (int i = 0; i < UsedCamPlaceholders.Count; i++)
         //    Debug.Log(UsedCamPlaceholders[i]);
 
@@ -112,13 +90,13 @@ public override void OnEpisodeBegin()
         Camera.tag = "Camera";
         Camera.transform.parent = CameraParent.transform;
 
-        // CameraList: beledobáljuk a lehelyezett kamerákat /OnEpisodeBegin-nél kitakarítjuk
         CameraList.Add(Camera);
 
         if (UsedCamPlaceholders.Count == MAXSTEP)
         {
             bool isUnique = isUniqueList(UsedCamPlaceholders);
-            //Debug.Log("Egyedi kiválasztás: "+ isUnique);
+            moveCheckpointParentDown();
+            //Debug.Log("Are the elements of the UsedCamPlaceholders list unique: "+ isUnique);
         }
 
     }
@@ -160,12 +138,4 @@ public override void OnEpisodeBegin()
         return list.Distinct().Count() == list.Count();
     }
 }
-
-
-//IMPORTANT 
-// What we know rn:
-// The cameras we place are not placed yet > we can't really refer to them
-// We can not get their components this way either > question: how can we get a component of an object yet to be created? 
-// Once created, we need a function to check all cameras
-
 
