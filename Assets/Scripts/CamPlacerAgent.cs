@@ -96,9 +96,8 @@ public override void OnEpisodeBegin()
         {
             bool isUnique = isUniqueList(UsedCamPlaceholders);
             moveCheckpointParentDown();
-            //Debug.Log("Are the elements of the UsedCamPlaceholders list unique: "+ isUnique);
+            Debug.Log("Are the elements of the UsedCamPlaceholders list unique: " + isUnique);
         }
-
     }
 
     /* private void OnTriggerEnter(Collider other) {
@@ -131,11 +130,31 @@ public override void OnEpisodeBegin()
     {
         CheckpointParent.transform.position = transform.position + new Vector3(0, -10, 0);
 
+        //TEST
+        Debug.Log("I should have moved the CheckpointParent down but I'm not clever enough, duhh");
+
     }
 
     public bool isUniqueList<T>(List<T> list)
     {
         return list.Distinct().Count() == list.Count();
     }
+
+    /*
+     Reward calculation
+    if (isUnique) {
+        (CurrentCheckedCheckPoints / numberOfCheckPointsInEnvironment) * 0.1f * MAXSTEP //(0-1) * MAXSTEP reward
+    } 
+    else
+       {
+         SetReward(-0.2f);
+       }
+    }
+    else if (UsedCamPlaceholders.Count > MAXSTEP)
+        //This should never happen
+        SetReward(-2f);
+        
+    }
+     */
 }
 
