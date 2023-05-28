@@ -689,6 +689,7 @@ MonoBehaviour:
   - {fileID: 221612098}
   - {fileID: 413105377}
   - {fileID: 159427315}
+  CurrentCheckedCheckPoints: 0
 --- !u!1 &615773100
 GameObject:
   m_ObjectHideFlags: 0

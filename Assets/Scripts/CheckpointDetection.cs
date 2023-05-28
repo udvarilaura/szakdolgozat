@@ -6,13 +6,19 @@ public class CheckpointDetection : MonoBehaviour
 {
 
     public bool amIDetected = false;
-   
+
+    void FixedUpdate()
+    {
+        Debug.Log("Checkpoint position" + transform.position.ToString());
+    }
+
     private void OnTriggerEnter(Collider coll)
     {
+        Debug.Log("Kiskutya");
         if (coll.gameObject.name == "Vision")
         {
             amIDetected = true;
-            Debug.Log("I got detected");
+            Debug.Log("CheckpointDetection : I got detected");
         }
     }
 
@@ -21,9 +27,10 @@ public class CheckpointDetection : MonoBehaviour
         if (coll.gameObject.name == "Vision")
         {
             amIDetected = false;
-            Debug.Log("Am no longer detected");
+            Debug.Log("CheckpointDetection : Am no longer detected");
 
         }
     }
+    
 
 }

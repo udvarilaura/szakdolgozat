@@ -19245,6 +19245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1553690873}
+  - component: {fileID: 1553690874}
   m_Layer: 0
   m_Name: CheckPointParent
   m_TagString: Untagged
@@ -19411,6 +19412,21 @@ Transform:
   m_Father: {fileID: 1281639088}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1553690874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553690872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 572234e2a41791f4686a16a64279504f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CheckPoints:
+  - {fileID: 0}
+  CurrentCheckedCheckPoints: 0
 --- !u!1 &1556122622 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1921231649747141328, guid: 6c49a2b360f8f2b4796ee229c18f0749, type: 3}
@@ -26029,7 +26045,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4419789369845137481, guid: 1e10625a231ddbb4c883e0a0138128cc, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 75
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 4419789369845137481, guid: 1e10625a231ddbb4c883e0a0138128cc, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]

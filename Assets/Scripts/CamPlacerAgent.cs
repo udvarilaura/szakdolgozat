@@ -1,10 +1,11 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using System.Linq;
+//using System.Threading;
 public class CamPlacerAgent : Agent
 {
     [SerializeField] public List<GameObject> CameraPlaceholders; //List of the camera placeholders the agent can place objects to
@@ -15,12 +16,23 @@ public class CamPlacerAgent : Agent
 
     private List<GameObject> CameraList; // Storing the currently added cameras
     private CamInstantiate CamInstantiate; //script we import the CameraInstantiate function from
+    private CheckPointMover CheckPointMover;
     private List<int> UsedCamPlaceholders;
+    private int NumberOfCheckPoints;
 
 public override void OnEpisodeBegin()
     {
 
-        moveCheckpointParentUp();
+        //Debug.Log("In the beginning of the episode - should be 0, 0, 0" + CheckpointParent.transform.position.ToString());
+
+
+        CamInstantiate = gameObject.AddComponent<CamInstantiate>(); /// !!!!!
+        CheckPointMover = gameObject.AddComponent<CheckPointMover>(); /// !!!!!
+        NumberOfCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().getNumberOfCheckPoints();
+
+        CheckpointParent.GetComponent<DetectionHelper>().NullChildren();
+
+        CheckPointMover.MoveObjectUp(CheckpointParent, 5);
 
         //Looking for the objects with Camera tag --- This is surely looking for cameras all over the world, check later
         GameObject[] CamGameObjects = GameObject.FindGameObjectsWithTag("Camera");
@@ -41,9 +53,6 @@ public override void OnEpisodeBegin()
         //}
         CameraList = new List<GameObject>();
 
-
-        CamInstantiate = gameObject.AddComponent<CamInstantiate>();
-
         UsedCamPlaceholders = new List<int>();
     }
 
@@ -58,17 +67,13 @@ public override void OnEpisodeBegin()
             sensor.AddObservation(CameraPlaceholder.transform.localPosition.z);
         }
 
-        //We also check the transform positions of the checkpoint in the scene
-        //sensor.AddObservation(CheckpointTransform.localPosition.y);
-        //sensor.AddObservation(CheckpointTransform.localPosition.x);
-        //sensor.AddObservation(CheckpointTransform.localPosition.z);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        int CurrentCheckedCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().getNumberOfDetectedCheckPoints();
 
-        int CurrentCheckedCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().CurrentCheckedCheckPoints;
-
+        Debug.Log("Agent: currentCheckedCheckPoints: " + CurrentCheckedCheckPoints);
 
         int action = actions.DiscreteActions[0];
 
@@ -76,7 +81,10 @@ public override void OnEpisodeBegin()
         //Debug.Log("action we took: " + action);
 
         GameObject SelectedPlaceholder = CameraPlaceholders[action];
-        UsedCamPlaceholders.Add(CameraPlaceholders.IndexOf(SelectedPlaceholder));
+        //UsedCamPlaceholders.Add(CameraPlaceholders.IndexOf(SelectedPlaceholder));
+        //check if SelectedPlaceholder is in UsedCamPlaceholders, negative reward & end EndEpisode
+
+        UsedCamPlaceholders.Add(action);
 
         //Tests: 
         //for (int i = 0; i < UsedCamPlaceholders.Count; i++)
@@ -92,25 +100,16 @@ public override void OnEpisodeBegin()
 
         CameraList.Add(Camera);
 
+
         if (UsedCamPlaceholders.Count == MAXSTEP)
         {
+            CheckPointMover.MoveObjectDown(CheckpointParent, 5);
             bool isUnique = isUniqueList(UsedCamPlaceholders);
-            moveCheckpointParentDown();
             Debug.Log("Are the elements of the UsedCamPlaceholders list unique: " + isUnique);
+            SetReward(RewardCalculation(CurrentCheckedCheckPoints, NumberOfCheckPoints));
+            EndEpisode();  
         }
     }
-
-    /* private void OnTriggerEnter(Collider other) {
-        
-        if (CheckListOfCameraDetections() > 0)
-        {
-            SetReward(+0.2f);
-        }
-        else
-        {
-            SetReward(-0.2f);
-        }
-    } */
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -120,41 +119,16 @@ public override void OnEpisodeBegin()
 
     }
 
-    public void moveCheckpointParentUp()
-    {
-        CheckpointParent.transform.position = transform.position + new Vector3(0, 10, 0);
-
-    }
-
-    public void moveCheckpointParentDown()
-    {
-        CheckpointParent.transform.position = transform.position + new Vector3(0, -10, 0);
-
-        //TEST
-        Debug.Log("I should have moved the CheckpointParent down but I'm not clever enough, duhh");
-
-    }
-
     public bool isUniqueList<T>(List<T> list)
     {
         return list.Distinct().Count() == list.Count();
     }
 
-    /*
-     Reward calculation
-    if (isUnique) {
-        (CurrentCheckedCheckPoints / numberOfCheckPointsInEnvironment) * 0.1f * MAXSTEP //(0-1) * MAXSTEP reward
-    } 
-    else
-       {
-         SetReward(-0.2f);
-       }
+    
+    public float RewardCalculation(int CurrentCheckedCheckPoints, int numberOfCheckPointsInEnvironment)
+    {
+        return (CurrentCheckedCheckPoints / numberOfCheckPointsInEnvironment);  //(0-1)
     }
-    else if (UsedCamPlaceholders.Count > MAXSTEP)
-        //This should never happen
-        SetReward(-2f);
-        
-    }
-     */
+    
 }
 
