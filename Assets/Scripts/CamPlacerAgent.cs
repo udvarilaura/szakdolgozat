@@ -16,7 +16,7 @@ public class CamPlacerAgent : Agent
 
     private List<GameObject> CameraList; // Storing the currently added cameras
     private CamInstantiate CamInstantiate; //script we import the CameraInstantiate function from
-    private CheckPointMover CheckPointMover;
+    //private CheckPointMover CheckPointMover;
     private List<int> UsedCamPlaceholders;
     private int NumberOfCheckPoints;
 
@@ -27,12 +27,12 @@ public override void OnEpisodeBegin()
 
 
         CamInstantiate = gameObject.AddComponent<CamInstantiate>(); /// !!!!!
-        CheckPointMover = gameObject.AddComponent<CheckPointMover>(); /// !!!!!
+        //CheckPointMover = gameObject.AddComponent<CheckPointMover>(); /// !!!!!
         NumberOfCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().getNumberOfCheckPoints();
 
         CheckpointParent.GetComponent<DetectionHelper>().NullChildren();
 
-        CheckPointMover.MoveObjectUp(CheckpointParent, 5);
+        //CheckPointMover.MoveObjectUp(CheckpointParent, 10);
 
         //Looking for the objects with Camera tag --- This is surely looking for cameras all over the world, check later
         GameObject[] CamGameObjects = GameObject.FindGameObjectsWithTag("Camera");
@@ -73,7 +73,7 @@ public override void OnEpisodeBegin()
     {
         int CurrentCheckedCheckPoints = CheckpointParent.GetComponent<DetectionHelper>().getNumberOfDetectedCheckPoints();
 
-        Debug.Log("Agent: currentCheckedCheckPoints: " + CurrentCheckedCheckPoints);
+        //Debug.Log("Agent: currentCheckedCheckPoints: " + CurrentCheckedCheckPoints);
 
         int action = actions.DiscreteActions[0];
 
@@ -103,9 +103,11 @@ public override void OnEpisodeBegin()
 
         if (UsedCamPlaceholders.Count == MAXSTEP)
         {
-            CheckPointMover.MoveObjectDown(CheckpointParent, 5);
+            //CheckPointMover.MoveObjectDown(CheckpointParent, 10);
             bool isUnique = isUniqueList(UsedCamPlaceholders);
-            Debug.Log("Are the elements of the UsedCamPlaceholders list unique: " + isUnique);
+            //Debug.Log("Are the elements of the UsedCamPlaceholders list unique: " + isUnique);
+            //Debug.Log("CurrentCheckedCheckPoints " + CurrentCheckedCheckPoints);
+            //Debug.Log("NumberOfCheckPoints " + NumberOfCheckPoints);
             SetReward(RewardCalculation(CurrentCheckedCheckPoints, NumberOfCheckPoints));
             EndEpisode();  
         }

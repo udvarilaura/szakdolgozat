@@ -69,6 +69,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amIDetected: 0
+  checkLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!23 &-6394177577260166683
 MeshRenderer:
   m_ObjectHideFlags: 0
