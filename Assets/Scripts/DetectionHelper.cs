@@ -4,16 +4,40 @@ using UnityEngine;
 
 public class DetectionHelper : MonoBehaviour
 {
-    [SerializeField] List<GameObject> CheckPoints;
     public int CurrentCheckedCheckPoints; //The number of the CheckPoint children of this object that are triggered by a camera vision
+    public List<GameObject> CheckPoints = new();
 
-    /*void FixedUpdate()
+    private void Start()
     {
+
+        // Get all the children of the parent object
+        Debug.Log("DetectionHelper ran Start method");
+        if (CheckPoints.Count == 0) { 
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject child = transform.GetChild(i).gameObject;
+                CheckPoints.Add(child);
+                //Debug.Log("child: "+child);
+            }
+        }
+        else
+        {
+            Debug.Log("Why are you running");
+        }
+
+        Debug.Log("Detection Helper - childCount: " +transform.childCount);
+    }
+
+    void FixedUpdate()
+    {
+
+        //Debug.Log("DetectionHelper GameObject Name: " + gameObject.name);
+
         CurrentCheckedCheckPoints = getNumberOfDetectedCheckPoints();
-        
+
         //Test
         Debug.Log("DetectionHelper: currentCheckedCheckPoints: " + CurrentCheckedCheckPoints);
-    }*/
+    }
 
     public int getNumberOfDetectedCheckPoints()
     {

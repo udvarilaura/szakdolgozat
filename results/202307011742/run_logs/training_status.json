@@ -1,0 +1,29 @@
+{
+    "camPlacerAgent": {
+        "checkpoints": [
+            {
+                "steps": 874,
+                "file_path": "results\\202307011742\\camPlacerAgent\\camPlacerAgent-874.onnx",
+                "reward": 0.0,
+                "creation_time": 1688226256.038173,
+                "auxillary_file_paths": [
+                    "results\\202307011742\\camPlacerAgent\\camPlacerAgent-874.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 874,
+            "file_path": "results\\202307011742\\camPlacerAgent.onnx",
+            "reward": 0.0,
+            "creation_time": 1688226256.038173,
+            "auxillary_file_paths": [
+                "results\\202307011742\\camPlacerAgent\\camPlacerAgent-874.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}
